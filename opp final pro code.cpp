@@ -124,3 +124,192 @@ do {
             string cancelName;
             cout << "Enter passenger name to cancel: ";
             getline(cin, cancelName);
+//flight class info
+class Flight {
+	public:
+    string flightNum, origin, destination;
+    int seatsAvailable;
+    float fare;
+     //function to set flight's detail
+    void setFlight(string fn, string o, string d, int s, float f) {
+        flightNum = fn;
+        origin = o;
+        destination = d;
+        seatsAvailable = s;
+        fare = f;
+    }
+    
+string toUpperCase(string str) {
+    for (size_t i = 0; i < str.length(); ++i) {
+        str[i] = toupper(str[i]); // Convert each char to uppercase
+    }
+    return str;
+}
+  // function to get flight number and is red-only
+    string getFlightNumber() const
+	 {
+	  return flightNum;
+	   }
+	   //function to get available seats
+    int getSeatsAvailable() 
+	{ 
+	return seatsAvailable; 
+	}
+	//function to get flight fare
+    float getFare()
+	 {
+	  return fare;
+	   }
+	   //function to get seat
+    void bookSeat()
+	 { 
+	flightNum = toUpperCase(flightNum);
+	seatsAvailable--;
+	 }
+	 //function to cacel seat
+    void cancelSeat()
+	 { 
+	flightNum = toUpperCase(flightNum);
+	seatsAvailable++;
+	 }
+	 //function to show flight
+    void displayFlight() 
+	{
+        cout << "Flight: " << flightNum << ", From: " << origin
+             << ", To: " << destination << ", Seats: " << seatsAvailable
+             << ", Fare: $" << fare << endl;
+    }
+
+    // New function: get flight route as string
+    string getRoute() {
+        return origin + " -> " + destination;
+    }
+
+    // New function: check if flight is fully booked
+    bool isFull() {
+        return seatsAvailable <= 0;
+    }
+};
+ //class represent payment
+class Payment {
+    string method;
+    float amount;
+public:
+	//function to set payment details
+    void setPayment(string m, float a) {
+        method = m; 
+		amount = a;
+    }
+    //function to show payment details
+    void displayPayment() 
+	{
+        cout << "Payment Method: " << method << ", Amount: $" << amount << endl;
+    }
+
+    // New function: get payment summary
+    string paymentSummary() {
+        stringstream ss;
+        ss << method << " payment of $" << amount;
+        return ss.str();
+    }
+};
+int idx = findPassengerIndex(passengers, passengerCount, cancelName);
+            if (idx != -1) {
+                string flightNum = passengers[idx].getFlightNumber();
+
+                for (int i = idx; i < passengerCount - 1; ++i) {
+                    passengers[i] = passengers[i + 1];
+                    payments[i] = payments[i + 1];
+                    tickets[i] = tickets[i + 1];
+                }
+                passengerCount--;
+                paymentCount--;
+                ticketCount--;
+
+                int fIdx = findFlightIndex(flights, flightCount, flightNum);
+                if (fIdx != -1) 
+				{
+                    flights[fIdx].cancelSeat();
+                }
+                cout << "Booking cancelled.\n";
+            }
+			 else 
+			 {
+                cout << "Passenger not found.\n";
+            }
+        }
+        else if (choice == 5) 
+		{
+            if (passengerCount == 0) 
+			{
+                cout << "No passengers booked yet.\n";
+            }
+			 else
+			  {
+                printDivider();
+                for (int i = 0; i < passengerCount; ++i) {
+                    passengers[i].displayPassenger();
+                }
+                printDivider();
+            }
+        }
+        else if (choice == 6)
+		 {
+            if (paymentCount == 0)
+			 {
+                cout << "No payments recorded yet.\n";
+            }
+			 else 
+			 {
+                printDivider();
+                for (int i = 0; i < paymentCount; ++i) {
+                    payments[i].displayPayment();
+                }
+                printDivider();
+            }
+        }
+        else if (choice == 7)
+		 {
+            if (ticketCount == 0) 
+			{
+                cout << "No tickets issued yet.\n";
+            } else
+			 {
+                printDivider();
+                for (int i = 0; i < ticketCount; ++i) 
+				{
+                    tickets[i].displayTicket();
+                }
+                printDivider();
+            }
+        }
+        else if (choice == 8) 
+		{
+            // Change admin password
+            string oldPW, newPW;
+            cout << "Enter current admin password: ";
+            getline(cin, oldPW);
+            cout << "Enter new admin password: ";
+            getline(cin, newPW);
+            if (admin.changePassword(oldPW, newPW))
+			 {
+                cout << "Admin password changed successfully.\n";
+            }
+			 else
+			 {
+                cout << "Incorrect current password. Password not changed.\n";
+            }
+        }
+        else if (choice == 0)
+		 {
+            cout << "Thank you for using the Airline Reservation System.\n";
+            break;
+        }
+        else
+		 {
+            cout << "Invalid choice. Please try again.\n";
+        }
+    } while (true);
+
+    return 0;
+}
